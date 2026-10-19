@@ -1,4 +1,4 @@
-difftastic (FULL_VERSION) DIST; urgency=low
+difftastic (FULL_VERSION) stable; urgency=low
 
   ## 0.70 (unreleased)
   

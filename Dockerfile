@@ -1,7 +1,5 @@
-ARG DEBIAN_DIST=bookworm
-FROM debian:$DEBIAN_DIST
+FROM debian:bookworm
 
-ARG DEBIAN_DIST
 ARG difftastic_VERSION
 ARG BUILD_VERSION
 ARG FULL_VERSION
@@ -29,9 +27,7 @@ COPY output/copyright /output/usr/share/doc/difftastic/
 COPY output/changelog.Debian /output/usr/share/doc/difftastic/
 COPY output/README.md /output/usr/share/doc/difftastic/
 
-RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/usr/share/doc/difftastic/changelog.Debian
 RUN sed -i "s/FULL_VERSION/$FULL_VERSION/" /output/usr/share/doc/difftastic/changelog.Debian
-RUN sed -i "s/DIST/$DEBIAN_DIST/" /output/DEBIAN/control
 RUN sed -i "s/difftastic_VERSION/$difftastic_VERSION/" /output/DEBIAN/control
 RUN sed -i "s/BUILD_VERSION/$BUILD_VERSION/" /output/DEBIAN/control
 RUN sed -i "s/SUPPORTED_ARCHITECTURES/$ARCH/" /output/DEBIAN/control
@@ -42,4 +38,4 @@ RUN sed -i "s/PACKAGE_DEPENDS/$PACKAGE_DEPENDS/" /output/DEBIAN/control
 RUN INSTALLED_SIZE="$(du -k -s --exclude=DEBIAN /output | cut -f1)" \
     && sed -i "s/INSTALLED_SIZE/$INSTALLED_SIZE/" /output/DEBIAN/control
 
-RUN dpkg-deb --build /output /difftastic_${FULL_VERSION}.deb
+RUN dpkg-deb -Zxz --build /output /difftastic_${FULL_VERSION}.deb
