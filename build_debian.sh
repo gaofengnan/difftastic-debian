@@ -67,14 +67,18 @@ build_architecture() {
     package_depends=$(get_package_depends "$build_arch")
     difft_release="difft-${difftastic_VERSION}-${difft_target}"
 
-    echo "Building for architecture: $build_arch using difft-${difft_target}.tar.gz"
+    echo "Building for architecture: $build_arch using ${difft_release}.tar.gz"
 
     # Clean up any previous builds for this architecture
     rm -rf "$difft_release" || true
     rm -f "${difft_release}.tar.gz" || true
 
-    # Download and extract the difft binary for this architecture.
-    if ! wget -q "https://github.com/${UPSTREAM_REPO}/releases/download/${difftastic_VERSION}/difft-${difft_target}.tar.gz" -O "${difft_release}.tar.gz"; then
+    # Download and extract the difft binary for this architecture. Since 0.71.0
+    # the asset name carries the version (difft-<ver>-<target>); older releases
+    # used plain difft-<target>, so fall back to that for rebuilds.
+    local base_url="https://github.com/${UPSTREAM_REPO}/releases/download/${difftastic_VERSION}"
+    if ! wget -q "${base_url}/difft-${difftastic_VERSION}-${difft_target}.tar.gz" -O "${difft_release}.tar.gz" \
+       && ! wget -q "${base_url}/difft-${difft_target}.tar.gz" -O "${difft_release}.tar.gz"; then
         echo "❌ Failed to download difft binary for $build_arch"
         return 1
     fi

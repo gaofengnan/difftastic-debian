@@ -20,8 +20,9 @@ override_dh_auto_build:
 		*) echo "Unsupported architecture: $$arch"; exit 1 ;; \
 	esac; \
 	DIFFT_RELEASE="difft-$(DIFFTASTIC_VERSION)-$$DIFFT_TARGET"; \
-	echo "Downloading difft-$$DIFFT_TARGET.tar.gz for $(DIFFTASTIC_VERSION)..."; \
-	wget -q "$(UPSTREAM_URL)/releases/download/$(DIFFTASTIC_VERSION)/difft-$$DIFFT_TARGET.tar.gz" -O "$$DIFFT_RELEASE.tar.gz"; \
+	echo "Downloading $$DIFFT_RELEASE.tar.gz..."; \
+	wget -q "$(UPSTREAM_URL)/releases/download/$(DIFFTASTIC_VERSION)/$$DIFFT_RELEASE.tar.gz" -O "$$DIFFT_RELEASE.tar.gz" \
+	  || wget -q "$(UPSTREAM_URL)/releases/download/$(DIFFTASTIC_VERSION)/difft-$$DIFFT_TARGET.tar.gz" -O "$$DIFFT_RELEASE.tar.gz"; \
 	mkdir -p "$$DIFFT_RELEASE"; \
 	tar -xf "$$DIFFT_RELEASE.tar.gz" -C "$$DIFFT_RELEASE"; \
 	rm -f "$$DIFFT_RELEASE.tar.gz"; \
